@@ -1,0 +1,186 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.19 sec)
+
+
+#UC-1-Ability To Create Payroll Service DataBase
+
+mysql> create database payroll_services;
+Query OK, 1 row affected (0.29 sec)
+
+mysql> use payroll_services;
+Database changed
+
+mysql> select database();
++------------------+
+| database()       |
++------------------+
+| payroll_services |
++------------------+
+1 row in set (0.00 sec)
+
+
+#UC-2-Create a Table To Manage Employee Payrolls
+
+mysql> create table employee_payroll(id int unsigned not null auto_increment, name varchar(100) not null, salary double, startDate date not null, primary key (id));
+Query OK, 0 rows affected (1.56 sec)
+
+
+#UC-3-Insert Contact Into Table
+
+mysql> insert into employee_payroll (name, salary, startDate) VALUES ('Charlie', 2000000.00, '2018-03-12'),('Terisa', 1500000.00, '2019-06-01'), ('Mike', 1800000.00, '2014-01-15');
+Query OK, 3 rows affected (0.17 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+
+#UC-4-Retrieve Data From Table
+
+mysql> select * from employee_payroll;
++----+---------+---------+------------+
+| id | name    | salary  | startDate  |
++----+---------+---------+------------+
+|  1 | Charlie | 2000000 | 2018-03-12 |
+|  2 | Terisa  | 1500000 | 2019-06-01 |
+|  3 | Mike    | 1800000 | 2014-01-15 |
++----+---------+---------+------------+
+3 rows in set (0.07 sec)
+
+
+#UC-5-Retrieve Salary Data For Particular Employee
+
+mysql> select Salary from employee_payroll where name ='Bill';
+Empty set (0.00 sec)
+
+mysql> select Salary from employee_payroll where name ='Mike';
++---------+
+| Salary  |
++---------+
+| 1800000 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee_payroll where StartDate between cast('2018-01-01' as Date ) AND DATE(NOW()) ;
++----+---------+---------+------------+
+| id | name    | salary  | startDate  |
++----+---------+---------+------------+
+|  1 | Charlie | 2000000 | 2018-03-12 |
+|  2 | Terisa  | 1500000 | 2019-06-01 |
++----+---------+---------+------------+
+2 rows in set (0.00 sec)
+
+
+#UC-6-Add Gender to Employee Payroll Table and Update the Rows
+
+mysql> alter table employee_payroll add gender char(1) after salary;
+Query OK, 0 rows affected (2.87 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update employee_payroll set gender = 'M' where name in('Charlie','Mike');
+Query OK, 2 rows affected (0.20 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> update employee_payroll set gender = 'F' where name = 'Terisa';
+Query OK, 1 row affected (0.13 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+---------+---------+--------+------------+
+| id | name    | salary  | gender | startDate  |
++----+---------+---------+--------+------------+
+|  1 | Charlie | 2000000 | M      | 2018-03-12 |
+|  2 | Terisa  | 1500000 | F      | 2019-06-01 |
+|  3 | Mike    | 1800000 | M      | 2014-01-15 |
++----+---------+---------+--------+------------+
+3 rows in set (0.00 sec)
+
+
+#UC-7-Find Sum Avg Min Max and Count from table
+
+mysql> select sum(Salary) from employee_payroll where Gender = 'F' group by Gender;
++-------------+
+| sum(Salary) |
++-------------+
+|     1500000 |
++-------------+
+1 row in set (0.07 sec)
+
+mysql> select sum(Salary) from employee_payroll where Gender = 'M' group by Gender;
++-------------+
+| sum(Salary) |
++-------------+
+|     3800000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Salary) from employee_payroll where Gender = 'F' group by Gender;
++-------------+
+| avg(Salary) |
++-------------+
+|     1500000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(Salary) from employee_payroll where Gender = 'M' group by Gender;
++-------------+
+| avg(Salary) |
++-------------+
+|     1900000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select min(Salary) from employee_payroll where Gender = 'F' group by Gender;
++-------------+
+| min(Salary) |
++-------------+
+|     1500000 |
++-------------+
+1 row in set (0.08 sec)
+
+mysql> select min(Salary) from employee_payroll where Gender = 'M' group by Gender;
++-------------+
+| min(Salary) |
++-------------+
+|     1800000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select max(Salary) from employee_payroll where Gender = 'F' group by Gender;
++-------------+
+| max(Salary) |
++-------------+
+|     1500000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select max(Salary) from employee_payroll where Gender = 'M' group by Gender;
++-------------+
+| max(Salary) |
++-------------+
+|     2000000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select count(Salary) from employee_payroll where Gender = 'F' group by Gender;
++---------------+
+| count(Salary) |
++---------------+
+|             1 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select count(Salary) from employee_payroll where Gender = 'M' group by Gender;
++---------------+
+| count(Salary) |
++---------------+
+|             2 |
++---------------+
+1 row in set (0.00 sec)
